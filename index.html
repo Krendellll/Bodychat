@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Bodychat — Live</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  background:#090a0f;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+header{
+  height:70px;
+  background:#101119;
+  border-bottom:1px solid #272936;
+  display:flex;
+  align-items:center;
+  padding:0 22px;
+  gap:30px;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:800;
+  letter-spacing:-1px;
+}
+
+.logo span{
+  color:#ff4f87;
+}
+
+nav{
+  display:flex;
+  gap:25px;
+}
+
+nav a{
+  color:#9296a5;
+  text-decoration:none;
+  font-weight:600;
+}
+
+nav a.active,
+nav a:hover{
+  color:#fff;
+}
+
+.search{
+  margin-left:auto;
+  width:230px;
+  padding:11px 15px;
+  border-radius:12px;
+  border:1px solid #292c38;
+  background:#181a23;
+  color:#fff;
+  outline:none;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+.login{
+  background:#1b1d27;
+  color:#fff;
+  padding:11px 16px;
+  border-radius:10px;
+}
+
+.signup{
+  background:linear-gradient(135deg,#ff4f87,#9c55ff);
+  color:white;
+  padding:11px 16px;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+main{
+  max-width:1400px;
+  margin:auto;
+  padding:35px 22px;
+}
+
+.hero{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:28px;
+}
+
+.hero h1{
+  font-size:40px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  color:#9296a5;
+}
+
+.creator{
+  background:linear-gradient(135deg,#ff4f87,#9c55ff);
+  color:white;
+  padding:13px 18px;
+  border-radius:11px;
+  font-weight:bold;
+}
+
+.filters{
+  display:flex;
+  gap:9px;
+  overflow-x:auto;
+  margin-bottom:25px;
+}
+
+.filter{
+  background:#151720;
+  color:#aaaebb;
+  border:1px solid #292c38;
+  padding:9px 16px;
+  border-radius:30px;
+  white-space:nowrap;
+}
+
+.filter.active{
+  background:#321622;
+  color:#fff;
+  border-color:#81304c;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.card{
+  background:#12141c;
+  border:1px solid #292c38;
+  border-radius:16px;
+  overflow:hidden;
+  transition:.2s;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  border-color:#555969;
+}
+
+.preview{
+  height:210px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:65px;
+  background:linear-gradient(135deg,#322139,#171923);
+  position:relative;
+}
+
+.preview.two{
+  background:linear-gradient(135deg,#202d3d,#171923);
+}
+
+.preview.three{
+  background:linear-gradient(135deg,#382629,#171923);
+}
+
+.preview.four{
+  background:linear-gradient(135deg,#252d29,#151918);
+}
+
+.live{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:#ed416d;
+  padding:5px 9px;
+  border-radius:6px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.viewers{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  background:#05060acc;
+  padding:5px 8px;
+  border-radius:6px;
+  font-size:11px;
+}
+
+.info{
+  padding:14px;
+}
+
+.user{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#3d4050,#222532);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:bold;
+}
+
+.online{
+  width:7px;
+  height:7px;
+  background:#48d788;
+  border-radius:50%;
+  display:inline-block;
+  margin-right:5px;
+}
+
+.name{
+  font-weight:bold;
+}
+
+.category{
+  color:#9296a5;
+  font-size:13px;
+  margin-top:4px;
+}
+
+.tag{
+  display:inline-block;
+  margin-top:11px;
+  background:#20232d;
+  color:#c3c6d0;
+  padding:5px 8px;
+  border-radius:6px;
+  font-size:11px;
+}
+
+footer{
+  margin-top:40px;
+  padding:30px 22px;
+  border-top:1px solid #272936;
+  color:#777c8b;
+  text-align:center;
+}
+
+@media(max-width:1000px){
+  .grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+@media(max-width:700px){
+  header{
+    padding:0 14px;
+    gap:12px;
+  }
+
+  nav{
+    display:none;
+  }
+
+  .search{
+    width:140px;
+  }
+
+  main{
+    padding:25px 14px;
+  }
+
+  .hero{
+    display:block;
+  }
+
+  .hero h1{
+    font-size:32px;
+  }
+
+  .creator{
+    margin-top:18px;
+  }
+
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .preview{
+    height:160px;
+  }
+}
+
+@media(max-width:480px){
+  .search{
+    display:none;
+  }
+
+  .signup{
+    display:none;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .preview{
+    height:220px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+Body<span>chat</span>
+</div>
+
+<nav>
+<a href="#" class="active">Live</a>
+<a href="#">Explore</a>
+<a href="#">Creators</a>
+</nav>
+
+<input
+class="search"
+id="search"
+placeholder="🔎 Пошук..."
+oninput="searchUsers()"
+>
+
+<button class="login">Увійти</button>
+
+<button class="signup">Реєстрація</button>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+<div>
+<h1>Зараз у Bodychat</h1>
+
+<p>
+Знайди цікаві прямі ефіри та спілкуйся з авторами.
+</p>
+</div>
+
+<button class="creator">
+Стати творцем
+</button>
+
+</section>
+
+
+<div class="filters">
+
+<button class="filter active" onclick="filter('all',this)">
+Усі
+</button>
+
+<button class="filter" onclick="filter('popular',this)">
+Популярні
+</button>
+
+<button class="filter" onclick="filter('new',this)">
+Нові
+</button>
+
+<button class="filter" onclick="filter('chat',this)">
+Чат
+</button>
+
+<button class="filter" onclick="filter('music',this)">
+Музика
+</button>
+
+<button class="filter" onclick="filter('gaming',this)">
+Gaming
+</button>
+
+</div>
+
+
+<section class="grid" id="cards">
+
+
+<div class="card" data-name="Mia" data-type="popular chat">
+
+<div class="preview">
+
+<span class="live">LIVE</span>
+
+<span class="viewers">
+1.8K глядачів
+</span>
+
+🎙️
+
+</div>
+
+<div class="info">
+
+<div class="user">
+
+<div class="avatar">M</div>
+
+<div>
+
+<div class="name">
+<span class="online"></span>
+Mia
+</div>
+
+<div class="category">
+Just chatting
+</div>
+
+</div>
+
+</div>
+
+<span class="tag">
+Популярна
+</span>
+
+</div>
+
+</div>
+
+
+
+<div class="card" data-name="Luna" data-type="new music">
+
+<div class="preview two">
+
+<span class="live">LIVE</span>
+
+<span class="viewers">
+934 глядачі
+</span>
+
+🎵
+
+</div>
+
+<div class="info">
+
+<div class="user">
+
+<div class="avatar">L</div>
+
+<div>
+
+<div class="name">
+<span class="online"></span>
+Luna
+</div>
+
+<div class="category">
+Music & Talk
+</div>
+
+</div>
+
+</div>
+
+<span class="tag">
+Нова
+</span>
+
+</div>
+
+</div>
+
+
+
+<div class="card" data-name="Alex" data-type="popular gaming">
+
+<div class="preview three">
+
+<span class="live">LIVE</span>
+
+<span class="viewers">
+2.4K глядачів
+</span>
+
+🎮
+
+</div>
+
+<div class="info">
+
+<div class="user">
+
+<div class="avatar">A</div>
+
+<div>
+
+<div class="name">
+<span class="online"></span>
+Alex
+</div>
+
+<div class="category">
+Gaming
+</div>
+
+</div>
+
+</div>
+
+<span class="tag">
+Gaming
+</span>
+
+</div>
+
+</div>
+
+
+
+<div class="card" data-name="Nora" data-type="chat new">
+
+<div class="preview four">
+
+<span class="live">LIVE</span>
+
+<span class="viewers">
+642 глядачі
+</span>
+
+💬
+
+</div>
+
+<div class="info">
+
+<div class="user">
+
+<div class="avatar">N</div>
+
+<div>
+
+<div class="name">
+<span class="online"></span>
+Nora
+</div>
+
+<div class="category">
+Open Chat
+</div>
+
+</div>
+
+</div>
+
+<span class="tag">
+Новинка
+</span>
+
+</div>
+
+</div>
+
+
+
+<div class="card" data-name="Eva" data-type="popular music">
+
+<div class="preview">
+
+<span class="live">LIVE</span>
+
+<span class="viewers">
+1.1K глядачів
+</span>
+
+🎤
+
+</div>
+
+<div class="info">
+
+<div class="user">
+
+<div class="avatar">E</div>
+
+<div>
+
+<div class="name">
+<span class="online"></span>
+Eva
+</div>
+
+<div class="category">
+Live Music
+</div>
+
+</div>
+
+</div>
+
+<span class="tag">
+Music
+</span>
+
+</div>
+
+</div>
+
+
+
+<div class="card" data-name="Max" data-type="new gaming">
+
+<div class="preview two">
+
+<span class="live">LIVE</span>
+
+<span class="viewers">
+388 глядачів
+</span>
+
+🕹️
+
+</div>
+
+<div class="info">
+
+<div class="user">
+
+<div class="avatar">M</div>
+
+<div>
+
+<div class="name">
+<span class="online"></span>
+Max
+</div>
+
+<div class="category">
+Gaming & Chat
+</div>
+
+</div>
+
+</div>
+
+<span class="tag">
+Новий
+</span>
+
+</div>
+
+</div>
+
+
+</section>
+
+</main>
+
+
+<footer>
+
+© 2026 Bodychat · Правила · Конфіденційність · Безпека · Підтримка
+
+</footer>
+
+
+<script>
+
+let currentFilter="all";
+
+function filter(type,button){
+
+currentFilter=type;
+
+document
+.querySelectorAll(".filter")
+.forEach(x=>x.classList.remove("active"));
+
+button.classList.add("active");
+
+showCards();
+
+}
+
+
+function searchUsers(){
+
+showCards();
+
+}
+
+
+function showCards(){
+
+let search=document
+.getElementById("search")
+.value
+.toLowerCase();
+
+document
+.querySelectorAll(".card")
+.forEach(card=>{
+
+let name=card
+.dataset
+.name
+.toLowerCase();
+
+let type=card
+.dataset
+.type;
+
+let correctFilter=
+currentFilter==="all" ||
+type.includes(currentFilter);
+
+let correctSearch=
+name.includes(search);
+
+card.style.display=
+correctFilter && correctSearch
+? ""
+: "none";
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
